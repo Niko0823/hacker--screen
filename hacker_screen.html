@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Niko Longo Terminal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #000;
+      color: #00ff41;
+      font-family: 'Courier New', monospace;
+      font-size: 15px;
+      padding: 20px;
+      min-height: 100vh;
+      line-height: 1.9;
+    }
+    .bright { color: #ffffff; font-weight: bold; }
+    .red    { color: #ff4444; }
+    .yellow { color: #ffff00; }
+    .cyan   { color: #00ffff; }
+    .done   { color: #00ff41; }
+    #cursor {
+      display: inline-block;
+      width: 10px; height: 16px;
+      background: #00ff41;
+      animation: blink 0.7s infinite;
+      vertical-align: middle;
+      margin-left: 2px;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    #restart-btn {
+      display: none;
+      margin-top: 24px;
+      padding: 12px 28px;
+      background: transparent;
+      color: #00ff41;
+      border: 1px solid #00ff41;
+      font-family: 'Courier New', monospace;
+      font-size: 15px;
+      cursor: pointer;
+      letter-spacing: 2px;
+    }
+    #restart-btn:hover { background: #00ff41; color: #000; }
+  </style>
+</head>
+<body>
+  <span id="output"></span><span id="cursor"></span>
+  <br>
+  <button id="restart-btn" onclick="startAnimation()">[ RESTART ]</button>
+
+  <script>
+    const out = document.getElementById('output');
+    const cursor = document.getElementById('cursor');
+    const btn = document.getElementById('restart-btn');
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    async function typeText(text, delay, cls) {
+      const span = document.createElement('span');
+      if (cls) span.className = cls;
+      out.appendChild(span);
+      for (let c of text) {
+        span.textContent += c;
+        window.scrollTo(0, document.body.scrollHeight);
+        await sleep(delay);
+      }
+      out.appendChild(document.createElement('br'));
+    }
+
+    function printLine(text, cls) {
+      const span = document.createElement('span');
+      if (cls) span.className = cls;
+      span.textContent = text;
+      out.appendChild(span);
+      out.appendChild(document.createElement('br'));
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    async function loadingBar(label, steps, delay) {
+      const wrap = document.createElement('span');
+      out.appendChild(wrap);
+      let bar = '';
+      for (let i = 0; i < steps; i++) {
+        bar += '=';
+        wrap.textContent = label + ' [' + bar;
+        window.scrollTo(0, document.body.scrollHeight);
+        await sleep(delay);
+      }
+      wrap.textContent = label + ' [' + bar + '] ';
+      const done = document.createElement('span');
+      done.className = 'done';
+      done.textContent = 'DONE';
+      out.appendChild(done);
+      out.appendChild(document.createElement('br'));
+    }
+
+    async function countdown(n) {
+      for (let i = n; i >= 1; i--) {
+        const s = document.createElement('span');
+        s.className = 'yellow';
+        s.textContent = '  >>> ' + i + ' seconds remaining...';
+        out.appendChild(s);
+        out.appendChild(document.createElement('br'));
+        window.scrollTo(0, document.body.scrollHeight);
+        await sleep(1000);
+      }
+    }
+
+    async function startAnimation() {
+      out.innerHTML = '';
+      btn.style.display = 'none';
+      cursor.style.display = 'inline-block';
+
+      await sleep(300);
+      printLine('##############################################', 'bright');
+      printLine('#                                            #', 'bright');
+      printLine('#      N I K O   L O N G O                  #', 'bright');
+      printLine('#      SYSTEM ACCESS TERMINAL v1.0          #', 'bright');
+      printLine('#      UDSM Engineering                     #', 'bright');
+      printLine('#                                            #', 'bright');
+      printLine('##############################################', 'bright');
+      await sleep(1200);
+
+      printLine('');
+      await typeText('Initializing secure connection...', 45);
+      await sleep(400);
+      await typeText('Bypassing firewall protocols...', 35);
+      await sleep(400);
+
+      printLine('');
+      await loadingBar('Scanning network   ', 25, 55);
+      await sleep(200);
+      await loadingBar('Cracking encryption', 25, 45);
+      await sleep(200);
+      await loadingBar('Accessing database ', 25, 35);
+      await sleep(500);
+
+      printLine('');
+      await typeText('>>> TARGET SYSTEM LOCATED <<<', 55, 'cyan');
+      await sleep(600);
+      await typeText('IP Address  : 192.168.XXX.XXX', 35);
+      await typeText('Device      : Android / Windows', 35);
+      await typeText('Status      : VULNERABLE', 35, 'red');
+      await sleep(700);
+
+      printLine('');
+      await typeText('WARNING: Initiating access in...', 45, 'yellow');
+      await sleep(400);
+      await countdown(5);
+
+      printLine('');
+      printLine('==============================================', 'bright');
+      await typeText('  ACCESS GRANTED. WELCOME, NIKO LONGO.', 65, 'bright');
+      printLine('==============================================', 'bright');
+      await sleep(800);
+
+      printLine('');
+      await typeText('Downloading files...          100%', 35);
+      await typeText('Extracting data...            100%', 35);
+      await typeText('Covering tracks...            100%', 35);
+      await sleep(600);
+
+      printLine('');
+      await typeText('>>> OPERATION COMPLETE. NO TRACE LEFT. <<<', 50, 'cyan');
+      await sleep(400);
+
+      printLine('');
+      printLine('----------------------------------------------');
+      printLine('  Powered by: Niko Longo | UDSM Engineering  ');
+      printLine('----------------------------------------------');
+
+      cursor.style.display = 'none';
+      btn.style.display = 'inline-block';
+    }
+
+    startAnimation();
+  </script>
+</body>
+</html>
